@@ -4,12 +4,15 @@ import { type Step } from "../types";
 import axios from "axios";
 import Editor from "@monaco-editor/react";
 import { URL } from "../utils/constant";
+import { useLocation } from "react-router-dom";
 
 const Sidebar = () => {
+  const location = useLocation();
+  const {prompt} = location.state as {prompt:string};
   const [files, setFiles] = useState<Step[]>([]);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [formatData,setFormatData] = useState<string>("")
-  const [userInput, setUserInput] = useState<string>("");
+  // const [userInput, setUserInput] = useState<string>("");
 
   const parseXml = async (response: string) => {
     const xmlMatch =  response.match(
@@ -61,7 +64,7 @@ const Sidebar = () => {
   const handlePost = async () => {
     try {
       const response = await axios.post(`${URL}/chat`, {
-        messages: userInput,
+        messages: prompt,
       });
       console.log("Server response:", response.data.response);
       setFormatData(response.data.response);
@@ -70,6 +73,7 @@ const Sidebar = () => {
     }
   };
 
+  useEffect(()=>{handlePost()},[])
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
@@ -88,7 +92,7 @@ const Sidebar = () => {
         ))}
 
         {/* Input and button for axios POST */}
-        <div className="border-2 mt-4 p-2 rounded">
+        {/* <div className="border-2 mt-4 p-2 rounded">
           <input
             className="w-full p-1 border mb-2"
             type="text"
@@ -102,7 +106,7 @@ const Sidebar = () => {
           >
             Send
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Code Editor */}

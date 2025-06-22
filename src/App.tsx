@@ -1,11 +1,18 @@
-import Sidebar from "./components/Sidebar"
 
-const App = () => {
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './components/Home';
+import Sidebar from './components/Sidebar';
+
+
+function App() {
   return (
-    <div>
-      <Sidebar/>
-    </div>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/dashboard" element={<Sidebar />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
